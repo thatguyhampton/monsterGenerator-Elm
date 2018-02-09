@@ -1,0 +1,525 @@
+var _user$project$App$selectFromValuesWithLabels = F3(
+	function (valuesWithLabels, currentValue, update) {
+		var optionForTuple = function (_p0) {
+			var _p1 = _p0;
+			var _p2 = _p1._0;
+			var ignoreInput = function (string) {
+				return update(_p2);
+			};
+			return A2(
+				_elm_lang$html$Html$option,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$selected(
+						_elm_lang$core$Native_Utils.eq(currentValue, _p2)),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Events$onInput(ignoreInput),
+						_1: {ctor: '[]'}
+					}
+				},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text(_p1._1),
+					_1: {ctor: '[]'}
+				});
+		};
+		var options = F2(
+			function (valuesWithLabels, currentValue) {
+				return A2(_elm_lang$core$List$map, optionForTuple, valuesWithLabels);
+			});
+		return A2(
+			_elm_lang$html$Html$select,
+			{ctor: '[]'},
+			A2(options, valuesWithLabels, currentValue));
+	});
+var _user$project$App$selectAndLabel = F4(
+	function (label, valuesWithLabels, currentValue, update) {
+		return A2(
+			_elm_lang$html$Html$div,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$label,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(label),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A3(_user$project$App$selectFromValuesWithLabels, valuesWithLabels, currentValue, update),
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _user$project$App$inputAndLabel = F4(
+	function (label, currentValue, update, inputType) {
+		return A2(
+			_elm_lang$html$Html$div,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$label,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(label),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$input,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$value(currentValue),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Events$onInput(update),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$type_(inputType),
+									_1: {ctor: '[]'}
+								}
+							}
+						},
+						{ctor: '[]'}),
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _user$project$App$update = F2(
+	function (msg, model) {
+		var _p3 = msg;
+		switch (_p3.ctor) {
+			case 'UpdateName':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{name: _p3._0});
+			case 'UpdateSize':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{size: _p3._0});
+			case 'UpdateType':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{mtype: _p3._0});
+			case 'UpdateTag':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{tag: _p3._0});
+			case 'UpdateAlignment':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{alignment: _p3._0});
+			case 'UpdateArmorClass':
+				var _p4 = _elm_lang$core$String$toInt(_p3._0);
+				if (_p4.ctor === 'Err') {
+					return model;
+				} else {
+					return _elm_lang$core$Native_Utils.update(
+						model,
+						{armorClass: _p4._0});
+				}
+			case 'UpdateHitPoints':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{hitPoints: _p3._0});
+			default:
+				var _p5 = _elm_lang$core$String$toInt(_p3._0);
+				if (_p5.ctor === 'Err') {
+					return model;
+				} else {
+					return _elm_lang$core$Native_Utils.update(
+						model,
+						{speed: _p5._0});
+				}
+		}
+	});
+var _user$project$App$Model = F8(
+	function (a, b, c, d, e, f, g, h) {
+		return {name: a, size: b, mtype: c, tag: d, alignment: e, armorClass: f, hitPoints: g, speed: h};
+	});
+var _user$project$App$Gargantuan = {ctor: 'Gargantuan'};
+var _user$project$App$Huge = {ctor: 'Huge'};
+var _user$project$App$Large = {ctor: 'Large'};
+var _user$project$App$Medium = {ctor: 'Medium'};
+var _user$project$App$Small = {ctor: 'Small'};
+var _user$project$App$Tiny = {ctor: 'Tiny'};
+var _user$project$App$sizeWithLabel = {
+	ctor: '::',
+	_0: {ctor: '_Tuple2', _0: _user$project$App$Tiny, _1: 'Tiny'},
+	_1: {
+		ctor: '::',
+		_0: {ctor: '_Tuple2', _0: _user$project$App$Small, _1: 'Small'},
+		_1: {
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: _user$project$App$Medium, _1: 'Medium'},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: _user$project$App$Large, _1: 'Large'},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: _user$project$App$Huge, _1: 'Huge'},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: _user$project$App$Gargantuan, _1: 'Gargantuan'},
+						_1: {ctor: '[]'}
+					}
+				}
+			}
+		}
+	}
+};
+var _user$project$App$Undead = {ctor: 'Undead'};
+var _user$project$App$Plant = {ctor: 'Plant'};
+var _user$project$App$Ooze = {ctor: 'Ooze'};
+var _user$project$App$Monstrosity = {ctor: 'Monstrosity'};
+var _user$project$App$Humanoid = {ctor: 'Humanoid'};
+var _user$project$App$Giant = {ctor: 'Giant'};
+var _user$project$App$Fiend = {ctor: 'Fiend'};
+var _user$project$App$Fey = {ctor: 'Fey'};
+var _user$project$App$Elemental = {ctor: 'Elemental'};
+var _user$project$App$Dragon = {ctor: 'Dragon'};
+var _user$project$App$Construct = {ctor: 'Construct'};
+var _user$project$App$Celestial = {ctor: 'Celestial'};
+var _user$project$App$Beast = {ctor: 'Beast'};
+var _user$project$App$Aberration = {ctor: 'Aberration'};
+var _user$project$App$Other = {ctor: 'Other'};
+var _user$project$App$typeWithLabel = {
+	ctor: '::',
+	_0: {ctor: '_Tuple2', _0: _user$project$App$Other, _1: 'Other'},
+	_1: {
+		ctor: '::',
+		_0: {ctor: '_Tuple2', _0: _user$project$App$Aberration, _1: 'Aberration'},
+		_1: {
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: _user$project$App$Beast, _1: 'Beast'},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: _user$project$App$Celestial, _1: 'Celestial'},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: _user$project$App$Construct, _1: 'Construct'},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: _user$project$App$Dragon, _1: 'Dragon'},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: _user$project$App$Elemental, _1: 'Elemental'},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: _user$project$App$Fey, _1: 'Fey'},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: _user$project$App$Fiend, _1: 'Fiend'},
+									_1: {
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: _user$project$App$Giant, _1: 'Giant'},
+										_1: {
+											ctor: '::',
+											_0: {ctor: '_Tuple2', _0: _user$project$App$Humanoid, _1: 'Humanoid'},
+											_1: {
+												ctor: '::',
+												_0: {ctor: '_Tuple2', _0: _user$project$App$Monstrosity, _1: 'Monstrosity'},
+												_1: {
+													ctor: '::',
+													_0: {ctor: '_Tuple2', _0: _user$project$App$Ooze, _1: 'Ooze'},
+													_1: {
+														ctor: '::',
+														_0: {ctor: '_Tuple2', _0: _user$project$App$Plant, _1: 'Plant'},
+														_1: {
+															ctor: '::',
+															_0: {ctor: '_Tuple2', _0: _user$project$App$Undead, _1: 'Undead'},
+															_1: {ctor: '[]'}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+};
+var _user$project$App$Yugoloth = {ctor: 'Yugoloth'};
+var _user$project$App$YuanTi = {ctor: 'YuanTi'};
+var _user$project$App$Troglodyte = {ctor: 'Troglodyte'};
+var _user$project$App$Titan = {ctor: 'Titan'};
+var _user$project$App$ThriKreen = {ctor: 'ThriKreen'};
+var _user$project$App$Shapechanger = {ctor: 'Shapechanger'};
+var _user$project$App$Sahuagin = {ctor: 'Sahuagin'};
+var _user$project$App$Quaggoth = {ctor: 'Quaggoth'};
+var _user$project$App$Orc = {ctor: 'Orc'};
+var _user$project$App$Merfolk = {ctor: 'Merfolk'};
+var _user$project$App$Lizardfolk = {ctor: 'Lizardfolk'};
+var _user$project$App$KuoToa = {ctor: 'KuoToa'};
+var _user$project$App$Kobold = {ctor: 'Kobold'};
+var _user$project$App$Kenku = {ctor: 'Kenku'};
+var _user$project$App$Human = {ctor: 'Human'};
+var _user$project$App$Grimlock = {ctor: 'Grimlock'};
+var _user$project$App$Goblinoid = {ctor: 'Goblinoid'};
+var _user$project$App$Gnome = {ctor: 'Gnome'};
+var _user$project$App$Gnoll = {ctor: 'Gnoll'};
+var _user$project$App$Gith = {ctor: 'Gith'};
+var _user$project$App$Elf = {ctor: 'Elf'};
+var _user$project$App$Dwarf = {ctor: 'Dwarf'};
+var _user$project$App$Devil = {ctor: 'Devil'};
+var _user$project$App$Demon = {ctor: 'Demon'};
+var _user$project$App$Bullywug = {ctor: 'Bullywug'};
+var _user$project$App$Aarakocra = {ctor: 'Aarakocra'};
+var _user$project$App$None = {ctor: 'None'};
+var _user$project$App$tagWithLabel = {
+	ctor: '::',
+	_0: {ctor: '_Tuple2', _0: _user$project$App$None, _1: 'None'},
+	_1: {
+		ctor: '::',
+		_0: {ctor: '_Tuple2', _0: _user$project$App$Aarakocra, _1: 'Aarakocra'},
+		_1: {
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: _user$project$App$Bullywug, _1: 'Bullywug'},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: _user$project$App$Demon, _1: 'Demon'},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: _user$project$App$Devil, _1: 'Devil'},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: _user$project$App$Dwarf, _1: 'Dwarf'},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: _user$project$App$Elf, _1: 'Elf'},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: _user$project$App$Gith, _1: 'Gith'},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: _user$project$App$Gnoll, _1: 'Gnoll'},
+									_1: {
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: _user$project$App$Gnome, _1: 'Gnome'},
+										_1: {
+											ctor: '::',
+											_0: {ctor: '_Tuple2', _0: _user$project$App$Goblinoid, _1: 'Goblinoid'},
+											_1: {
+												ctor: '::',
+												_0: {ctor: '_Tuple2', _0: _user$project$App$Grimlock, _1: 'Grimlock'},
+												_1: {
+													ctor: '::',
+													_0: {ctor: '_Tuple2', _0: _user$project$App$Human, _1: 'Human'},
+													_1: {
+														ctor: '::',
+														_0: {ctor: '_Tuple2', _0: _user$project$App$Kenku, _1: 'Kenku'},
+														_1: {
+															ctor: '::',
+															_0: {ctor: '_Tuple2', _0: _user$project$App$Kobold, _1: 'Kobold'},
+															_1: {
+																ctor: '::',
+																_0: {ctor: '_Tuple2', _0: _user$project$App$KuoToa, _1: 'Kuo-Toa'},
+																_1: {
+																	ctor: '::',
+																	_0: {ctor: '_Tuple2', _0: _user$project$App$Lizardfolk, _1: 'Lizardfolk'},
+																	_1: {
+																		ctor: '::',
+																		_0: {ctor: '_Tuple2', _0: _user$project$App$Merfolk, _1: 'Merfolk'},
+																		_1: {
+																			ctor: '::',
+																			_0: {ctor: '_Tuple2', _0: _user$project$App$Orc, _1: 'Orc'},
+																			_1: {
+																				ctor: '::',
+																				_0: {ctor: '_Tuple2', _0: _user$project$App$Quaggoth, _1: 'Quaggoth'},
+																				_1: {
+																					ctor: '::',
+																					_0: {ctor: '_Tuple2', _0: _user$project$App$Sahuagin, _1: 'Sahuagin'},
+																					_1: {
+																						ctor: '::',
+																						_0: {ctor: '_Tuple2', _0: _user$project$App$Shapechanger, _1: 'Shapechanger'},
+																						_1: {
+																							ctor: '::',
+																							_0: {ctor: '_Tuple2', _0: _user$project$App$ThriKreen, _1: 'Thri-Kreen'},
+																							_1: {
+																								ctor: '::',
+																								_0: {ctor: '_Tuple2', _0: _user$project$App$Titan, _1: 'Titan'},
+																								_1: {
+																									ctor: '::',
+																									_0: {ctor: '_Tuple2', _0: _user$project$App$Troglodyte, _1: 'Troglodyte'},
+																									_1: {
+																										ctor: '::',
+																										_0: {ctor: '_Tuple2', _0: _user$project$App$YuanTi, _1: 'Yuan-Ti'},
+																										_1: {
+																											ctor: '::',
+																											_0: {ctor: '_Tuple2', _0: _user$project$App$Yugoloth, _1: 'Yugoloth'},
+																											_1: {ctor: '[]'}
+																										}
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+};
+var _user$project$App$ChaoticEvil = {ctor: 'ChaoticEvil'};
+var _user$project$App$ChaoticNeutral = {ctor: 'ChaoticNeutral'};
+var _user$project$App$ChaoticGood = {ctor: 'ChaoticGood'};
+var _user$project$App$NeutralEvil = {ctor: 'NeutralEvil'};
+var _user$project$App$TrueNeutral = {ctor: 'TrueNeutral'};
+var _user$project$App$model = {name: '', size: _user$project$App$Medium, mtype: _user$project$App$Other, tag: _user$project$App$None, alignment: _user$project$App$TrueNeutral, armorClass: 10, hitPoints: '', speed: 30};
+var _user$project$App$NeutralGood = {ctor: 'NeutralGood'};
+var _user$project$App$LawfulEvil = {ctor: 'LawfulEvil'};
+var _user$project$App$LawfulNeutral = {ctor: 'LawfulNeutral'};
+var _user$project$App$LawfulGood = {ctor: 'LawfulGood'};
+var _user$project$App$alignmentWithLabel = {
+	ctor: '::',
+	_0: {ctor: '_Tuple2', _0: _user$project$App$LawfulGood, _1: 'Lawful Good'},
+	_1: {
+		ctor: '::',
+		_0: {ctor: '_Tuple2', _0: _user$project$App$LawfulNeutral, _1: 'Lawful Neutral'},
+		_1: {
+			ctor: '::',
+			_0: {ctor: '_Tuple2', _0: _user$project$App$LawfulEvil, _1: 'Lawful Evil'},
+			_1: {
+				ctor: '::',
+				_0: {ctor: '_Tuple2', _0: _user$project$App$NeutralGood, _1: 'Neutral Good'},
+				_1: {
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: _user$project$App$TrueNeutral, _1: 'True Neutral'},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: _user$project$App$NeutralEvil, _1: 'Neutral Evil'},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: _user$project$App$ChaoticGood, _1: 'Chaotic Good'},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: _user$project$App$ChaoticNeutral, _1: 'Chaotic Neutral'},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: _user$project$App$ChaoticEvil, _1: 'Chaotic Evil'},
+									_1: {ctor: '[]'}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+};
+var _user$project$App$UpdateSpeed = function (a) {
+	return {ctor: 'UpdateSpeed', _0: a};
+};
+var _user$project$App$UpdateHitPoints = function (a) {
+	return {ctor: 'UpdateHitPoints', _0: a};
+};
+var _user$project$App$UpdateArmorClass = function (a) {
+	return {ctor: 'UpdateArmorClass', _0: a};
+};
+var _user$project$App$UpdateAlignment = function (a) {
+	return {ctor: 'UpdateAlignment', _0: a};
+};
+var _user$project$App$UpdateTag = function (a) {
+	return {ctor: 'UpdateTag', _0: a};
+};
+var _user$project$App$UpdateType = function (a) {
+	return {ctor: 'UpdateType', _0: a};
+};
+var _user$project$App$UpdateSize = function (a) {
+	return {ctor: 'UpdateSize', _0: a};
+};
+var _user$project$App$UpdateName = function (a) {
+	return {ctor: 'UpdateName', _0: a};
+};
+var _user$project$App$view = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$input,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$value(model.name),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$placeholder('Name'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Events$onInput(_user$project$App$UpdateName),
+							_1: {ctor: '[]'}
+						}
+					}
+				},
+				{ctor: '[]'}),
+			_1: {
+				ctor: '::',
+				_0: A4(_user$project$App$selectAndLabel, 'Size', _user$project$App$sizeWithLabel, model.size, _user$project$App$UpdateSize),
+				_1: {
+					ctor: '::',
+					_0: A4(_user$project$App$selectAndLabel, 'Type', _user$project$App$typeWithLabel, model.mtype, _user$project$App$UpdateType),
+					_1: {
+						ctor: '::',
+						_0: A4(_user$project$App$selectAndLabel, 'Tag', _user$project$App$tagWithLabel, model.tag, _user$project$App$UpdateTag),
+						_1: {
+							ctor: '::',
+							_0: A4(_user$project$App$selectAndLabel, 'Alignment', _user$project$App$alignmentWithLabel, model.alignment, _user$project$App$UpdateAlignment),
+							_1: {
+								ctor: '::',
+								_0: A4(
+									_user$project$App$inputAndLabel,
+									'Armor Class',
+									_elm_lang$core$Basics$toString(model.armorClass),
+									_user$project$App$UpdateArmorClass,
+									'number'),
+								_1: {
+									ctor: '::',
+									_0: A4(_user$project$App$inputAndLabel, 'Hit Points', model.hitPoints, _user$project$App$UpdateHitPoints, 'text'),
+									_1: {
+										ctor: '::',
+										_0: A4(
+											_user$project$App$inputAndLabel,
+											'Speed',
+											_elm_lang$core$Basics$toString(model.speed),
+											_user$project$App$UpdateSpeed,
+											'number'),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		});
+};
+var _user$project$App$app = _elm_lang$html$Html$beginnerProgram(
+	{model: _user$project$App$model, view: _user$project$App$view, update: _user$project$App$update});
