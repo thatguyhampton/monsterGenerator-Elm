@@ -41,6 +41,16 @@ sizeWithLabel =
   , ( Gargantuan, "Gargantuan" )
   ]
 
+sizeToString : Size -> String
+sizeToString size =
+  case size of
+    Tiny -> "Tiny"
+    Small -> "Small"
+    Medium -> "Medium"
+    Large -> "Large"
+    Huge -> "Huge"
+    Gargantuan -> "Gargantuan"
+
 type Mtype = Other | Aberration | Beast | Celestial | Construct | Dragon | Elemental
   | Fey | Fiend | Giant | Humanoid | Monstrosity | Ooze | Plant | Undead
 
@@ -62,6 +72,25 @@ typeWithLabel =
   , ( Plant, "Plant" )
   , ( Undead, "Undead" )
   ]
+
+typeToString : Mtype -> String
+typeToString mtype =
+  case mtype of
+      Other -> "Other"
+      Aberration -> "Aberration"
+      Beast -> "Beast"
+      Celestial -> "Celestial"
+      Construct -> "Construct"
+      Dragon -> "Dragon"
+      Elemental -> "Elemental"
+      Fey -> "Fey"
+      Fiend -> "Fiend"
+      Giant -> "Giant"
+      Humanoid -> "Humanoid"
+      Monstrosity -> "Monstrosity"
+      Ooze -> "Ooze"
+      Plant -> "Plant"
+      Undead -> "Undead"
 
 type Tag = None | Aarakocra | Bullywug | Demon | Devil | Dwarf | Elf | Gith
   | Gnoll | Gnome | Goblinoid | Grimlock | Human
@@ -99,6 +128,37 @@ tagWithLabel =
   , ( Yugoloth, "Yugoloth" )
   ]
 
+tagToString : Tag -> String
+tagToString tag =
+  case tag of
+    None -> "None"
+    Aarakocra -> "Aarakocra"
+    Bullywug -> "Bullywug"
+    Demon -> "Demon"
+    Devil -> "Devil"
+    Dwarf -> "Dwarf"
+    Elf -> "Elf"
+    Gith -> "Gith"
+    Gnoll -> "Gnoll"
+    Gnome -> "Gnome"
+    Goblinoid -> "Goblinoid"
+    Grimlock -> "Grimlock"
+    Human -> "Human"
+    Kenku -> "Kenku"
+    Kobold -> "Kobold"
+    KuoToa -> "Kuo-Toa"
+    Lizardfolk -> "Lizardfolk"
+    Merfolk -> "Merfolk"
+    Orc -> "Orc"
+    Quaggoth -> "Quaggoth"
+    Sahuagin -> "Sahuagin"
+    Shapechanger -> "Shapechanger"
+    ThriKreen -> "Thri-Kreen"
+    Titan -> "Titan"
+    Troglodyte -> "Troglodyte"
+    YuanTi -> "Yuan-Ti"
+    Yugoloth -> "Yugoloth"
+
 type Alignment = LawfulGood | LawfulNeutral | LawfulEvil | NeutralGood
   | TrueNeutral | NeutralEvil | ChaoticGood | ChaoticNeutral | ChaoticEvil
 
@@ -114,6 +174,19 @@ alignmentWithLabel =
   , ( ChaoticNeutral, "Chaotic Neutral" )
   , ( ChaoticEvil, "Chaotic Evil" )
   ]
+
+alignmentToString : Alignment -> String
+alignmentToString alignment =
+  case alignment of
+    LawfulGood -> "Lawful Good"
+    LawfulNeutral -> "Lawful Neutral"
+    LawfulEvil -> "Lawful Evil"
+    NeutralGood -> "Neutral Good"
+    TrueNeutral -> "True Neutral"
+    NeutralEvil -> "Neutral Evil"
+    ChaoticGood -> "Chaotic Good"
+    ChaoticNeutral -> "Chaotic Neutral"
+    ChaoticEvil -> "Chaotic Evil"
 
 -- UPDATE
 
@@ -163,19 +236,54 @@ update msg model =
 view : Model -> Html.Html Msg
 view model =
   Html.div []
-  [ Html.input
-    [ Html.Attributes.value model.name
-    , Html.Attributes.placeholder "Name"
-    , Html.Events.onInput UpdateName
-    ] []
-  , selectAndLabel "Size" sizeWithLabel model.size UpdateSize
-  , selectAndLabel "Type" typeWithLabel model.mtype UpdateType
-  , selectAndLabel "Tag" tagWithLabel model.tag UpdateTag
-  , selectAndLabel "Alignment" alignmentWithLabel model.alignment UpdateAlignment
-  , inputAndLabel "Armor Class" (toString model.armorClass) UpdateArmorClass "number"
-  , inputAndLabel "Hit Points" model.hitPoints UpdateHitPoints "text"
-  , inputAndLabel "Speed" (toString model.speed) UpdateSpeed "number"
+  [ Html.div []
+    [ Html.input
+      [ Html.Attributes.value model.name
+        , Html.Attributes.placeholder "Name"
+        , Html.Events.onInput UpdateName
+      ] []
+    , selectAndLabel "Size" sizeWithLabel model.size UpdateSize
+    , selectAndLabel "Type" typeWithLabel model.mtype UpdateType
+    , selectAndLabel "Tag" tagWithLabel model.tag UpdateTag
+    , selectAndLabel "Alignment" alignmentWithLabel model.alignment UpdateAlignment
+    , inputAndLabel "Armor Class" (toString model.armorClass) UpdateArmorClass "number"
+    , inputAndLabel "Hit Points" model.hitPoints UpdateHitPoints "text"
+    , inputAndLabel "Speed" (toString model.speed) UpdateSpeed "number"
+    ]
+  , display model
   ]
+
+display : Model -> Html.Html Msg
+display model =
+  Html.div [ Html.Attributes.class "display" ]
+    [ Html.div [ Html.Attributes.class "card"]
+      [ Html.h2 [ Html.Attributes.class "name" ] [ Html.text model.name ]
+      , Html.p
+        [ Html.Attributes.class "sub-label" ]
+        [ Html.text <| displaySubHeader model.size model.mtype model.tag model.alignment ]
+      , Html.div [ Html.Attributes.class "divider" ] []
+      , displayLabelValue "Armor Class " <| toString <| model.armorClass
+      , displayLabelValue "Hit Points " model.hitPoints
+      , displayLabelValue "Speed " <| displaySpeed <| model.speed
+      ]
+    ]
+
+displaySpeed : Int -> String
+displaySpeed speed =
+  toString speed ++ " ft."
+
+displayLabelValue : String -> String -> Html.Html Msg
+displayLabelValue label value =
+  Html.p [ Html.Attributes.class "label" ]
+    [ Html.b [] [ Html.text label ]
+    , Html.text value
+    ]
+
+displaySubHeader : Size -> Mtype -> Tag -> Alignment -> String
+displaySubHeader size mtype tag alignment =
+  case tag of
+    None -> sizeToString size ++ " " ++ typeToString mtype ++ ", " ++ alignmentToString alignment
+    other -> sizeToString size ++ " " ++ typeToString mtype ++ " (" ++ tagToString tag ++ "), " ++ alignmentToString alignment
 
 inputAndLabel : String -> String -> (String -> Msg) -> String -> Html.Html Msg
 inputAndLabel label currentValue update inputType =
@@ -198,18 +306,43 @@ selectAndLabel label valuesWithLabels currentValue update =
 selectFromValuesWithLabels : List ( a, String ) -> a -> (a -> Msg) -> Html.Html Msg
 selectFromValuesWithLabels valuesWithLabels currentValue update =
   let
-    optionForTuple ( value, label ) =
-      let ignoreInput (string) = update value
-      in
-        Html.option
-          [ Html.Attributes.selected (currentValue == value)
-          , Html.Events.onInput ignoreInput
-          ]
-          [ Html.text label ]
+    optionForTuple (value, label) =
+      Html.option [Html.Attributes.selected (currentValue == value)][Html.text label]
 
     options valuesWithLabels currentValue =
       List.map optionForTuple valuesWithLabels
+
+    maybeValueFromLabel l =
+      List.filter (\( value, label ) -> label == l) valuesWithLabels
+        |> List.head
+
+    valueFromLabel label =
+      case maybeValueFromLabel label of
+        Nothing ->
+          currentValue
+        Just (value, label) ->
+          value
   in
     Html.select
-      []
+      [ Html.Events.onInput (update << valueFromLabel) ]
       (options valuesWithLabels currentValue)
+
+-- needs to be fixed as it is not updating fields correctly
+-- selectFromValuesWithLabels : List ( a, String ) -> a -> (a -> Msg) -> Html.Html Msg
+-- selectFromValuesWithLabels valuesWithLabels currentValue update =
+--   let
+--     optionForTuple ( value, label ) =
+--       let ignoreInput (string) = update value
+--       in
+--         Html.option
+--           [ Html.Attributes.selected (currentValue == value)
+--           , Html.Events.onInput ignoreInput
+--           ]
+--           [ Html.text label ]
+--
+--     options valuesWithLabels currentValue =
+--       List.map optionForTuple valuesWithLabels
+--   in
+--     Html.select
+--       []
+--       (options valuesWithLabels currentValue)

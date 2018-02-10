@@ -1,26 +1,36 @@
 var _user$project$App$selectFromValuesWithLabels = F3(
 	function (valuesWithLabels, currentValue, update) {
-		var optionForTuple = function (_p0) {
-			var _p1 = _p0;
-			var _p2 = _p1._0;
-			var ignoreInput = function (string) {
-				return update(_p2);
-			};
+		var maybeValueFromLabel = function (l) {
+			return _elm_lang$core$List$head(
+				A2(
+					_elm_lang$core$List$filter,
+					function (_p0) {
+						var _p1 = _p0;
+						return _elm_lang$core$Native_Utils.eq(_p1._1, l);
+					},
+					valuesWithLabels));
+		};
+		var valueFromLabel = function (label) {
+			var _p2 = maybeValueFromLabel(label);
+			if (_p2.ctor === 'Nothing') {
+				return currentValue;
+			} else {
+				return _p2._0._0;
+			}
+		};
+		var optionForTuple = function (_p3) {
+			var _p4 = _p3;
 			return A2(
 				_elm_lang$html$Html$option,
 				{
 					ctor: '::',
 					_0: _elm_lang$html$Html_Attributes$selected(
-						_elm_lang$core$Native_Utils.eq(currentValue, _p2)),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$html$Html_Events$onInput(ignoreInput),
-						_1: {ctor: '[]'}
-					}
+						_elm_lang$core$Native_Utils.eq(currentValue, _p4._0)),
+					_1: {ctor: '[]'}
 				},
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html$text(_p1._1),
+					_0: _elm_lang$html$Html$text(_p4._1),
 					_1: {ctor: '[]'}
 				});
 		};
@@ -30,7 +40,15 @@ var _user$project$App$selectFromValuesWithLabels = F3(
 			});
 		return A2(
 			_elm_lang$html$Html$select,
-			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Events$onInput(
+					function (_p5) {
+						return update(
+							valueFromLabel(_p5));
+					}),
+				_1: {ctor: '[]'}
+			},
 			A2(options, valuesWithLabels, currentValue));
 	});
 var _user$project$App$selectAndLabel = F4(
@@ -92,54 +110,340 @@ var _user$project$App$inputAndLabel = F4(
 				}
 			});
 	});
+var _user$project$App$displayLabelValue = F2(
+	function (label, value) {
+		return A2(
+			_elm_lang$html$Html$p,
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html_Attributes$class('label'),
+				_1: {ctor: '[]'}
+			},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$b,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(label),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html$text(value),
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _user$project$App$displaySpeed = function (speed) {
+	return A2(
+		_elm_lang$core$Basics_ops['++'],
+		_elm_lang$core$Basics$toString(speed),
+		' ft.');
+};
 var _user$project$App$update = F2(
 	function (msg, model) {
-		var _p3 = msg;
-		switch (_p3.ctor) {
+		var _p6 = msg;
+		switch (_p6.ctor) {
 			case 'UpdateName':
 				return _elm_lang$core$Native_Utils.update(
 					model,
-					{name: _p3._0});
+					{name: _p6._0});
 			case 'UpdateSize':
 				return _elm_lang$core$Native_Utils.update(
 					model,
-					{size: _p3._0});
+					{size: _p6._0});
 			case 'UpdateType':
 				return _elm_lang$core$Native_Utils.update(
 					model,
-					{mtype: _p3._0});
+					{mtype: _p6._0});
 			case 'UpdateTag':
 				return _elm_lang$core$Native_Utils.update(
 					model,
-					{tag: _p3._0});
+					{tag: _p6._0});
 			case 'UpdateAlignment':
 				return _elm_lang$core$Native_Utils.update(
 					model,
-					{alignment: _p3._0});
+					{alignment: _p6._0});
 			case 'UpdateArmorClass':
-				var _p4 = _elm_lang$core$String$toInt(_p3._0);
-				if (_p4.ctor === 'Err') {
+				var _p7 = _elm_lang$core$String$toInt(_p6._0);
+				if (_p7.ctor === 'Err') {
 					return model;
 				} else {
 					return _elm_lang$core$Native_Utils.update(
 						model,
-						{armorClass: _p4._0});
+						{armorClass: _p7._0});
 				}
 			case 'UpdateHitPoints':
 				return _elm_lang$core$Native_Utils.update(
 					model,
-					{hitPoints: _p3._0});
+					{hitPoints: _p6._0});
 			default:
-				var _p5 = _elm_lang$core$String$toInt(_p3._0);
-				if (_p5.ctor === 'Err') {
+				var _p8 = _elm_lang$core$String$toInt(_p6._0);
+				if (_p8.ctor === 'Err') {
 					return model;
 				} else {
 					return _elm_lang$core$Native_Utils.update(
 						model,
-						{speed: _p5._0});
+						{speed: _p8._0});
 				}
 		}
 	});
+var _user$project$App$alignmentToString = function (alignment) {
+	var _p9 = alignment;
+	switch (_p9.ctor) {
+		case 'LawfulGood':
+			return 'Lawful Good';
+		case 'LawfulNeutral':
+			return 'Lawful Neutral';
+		case 'LawfulEvil':
+			return 'Lawful Evil';
+		case 'NeutralGood':
+			return 'Neutral Good';
+		case 'TrueNeutral':
+			return 'True Neutral';
+		case 'NeutralEvil':
+			return 'Neutral Evil';
+		case 'ChaoticGood':
+			return 'Chaotic Good';
+		case 'ChaoticNeutral':
+			return 'Chaotic Neutral';
+		default:
+			return 'Chaotic Evil';
+	}
+};
+var _user$project$App$tagToString = function (tag) {
+	var _p10 = tag;
+	switch (_p10.ctor) {
+		case 'None':
+			return 'None';
+		case 'Aarakocra':
+			return 'Aarakocra';
+		case 'Bullywug':
+			return 'Bullywug';
+		case 'Demon':
+			return 'Demon';
+		case 'Devil':
+			return 'Devil';
+		case 'Dwarf':
+			return 'Dwarf';
+		case 'Elf':
+			return 'Elf';
+		case 'Gith':
+			return 'Gith';
+		case 'Gnoll':
+			return 'Gnoll';
+		case 'Gnome':
+			return 'Gnome';
+		case 'Goblinoid':
+			return 'Goblinoid';
+		case 'Grimlock':
+			return 'Grimlock';
+		case 'Human':
+			return 'Human';
+		case 'Kenku':
+			return 'Kenku';
+		case 'Kobold':
+			return 'Kobold';
+		case 'KuoToa':
+			return 'Kuo-Toa';
+		case 'Lizardfolk':
+			return 'Lizardfolk';
+		case 'Merfolk':
+			return 'Merfolk';
+		case 'Orc':
+			return 'Orc';
+		case 'Quaggoth':
+			return 'Quaggoth';
+		case 'Sahuagin':
+			return 'Sahuagin';
+		case 'Shapechanger':
+			return 'Shapechanger';
+		case 'ThriKreen':
+			return 'Thri-Kreen';
+		case 'Titan':
+			return 'Titan';
+		case 'Troglodyte':
+			return 'Troglodyte';
+		case 'YuanTi':
+			return 'Yuan-Ti';
+		default:
+			return 'Yugoloth';
+	}
+};
+var _user$project$App$typeToString = function (mtype) {
+	var _p11 = mtype;
+	switch (_p11.ctor) {
+		case 'Other':
+			return 'Other';
+		case 'Aberration':
+			return 'Aberration';
+		case 'Beast':
+			return 'Beast';
+		case 'Celestial':
+			return 'Celestial';
+		case 'Construct':
+			return 'Construct';
+		case 'Dragon':
+			return 'Dragon';
+		case 'Elemental':
+			return 'Elemental';
+		case 'Fey':
+			return 'Fey';
+		case 'Fiend':
+			return 'Fiend';
+		case 'Giant':
+			return 'Giant';
+		case 'Humanoid':
+			return 'Humanoid';
+		case 'Monstrosity':
+			return 'Monstrosity';
+		case 'Ooze':
+			return 'Ooze';
+		case 'Plant':
+			return 'Plant';
+		default:
+			return 'Undead';
+	}
+};
+var _user$project$App$sizeToString = function (size) {
+	var _p12 = size;
+	switch (_p12.ctor) {
+		case 'Tiny':
+			return 'Tiny';
+		case 'Small':
+			return 'Small';
+		case 'Medium':
+			return 'Medium';
+		case 'Large':
+			return 'Large';
+		case 'Huge':
+			return 'Huge';
+		default:
+			return 'Gargantuan';
+	}
+};
+var _user$project$App$displaySubHeader = F4(
+	function (size, mtype, tag, alignment) {
+		var _p13 = tag;
+		if (_p13.ctor === 'None') {
+			return A2(
+				_elm_lang$core$Basics_ops['++'],
+				_user$project$App$sizeToString(size),
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					' ',
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_user$project$App$typeToString(mtype),
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							', ',
+							_user$project$App$alignmentToString(alignment)))));
+		} else {
+			return A2(
+				_elm_lang$core$Basics_ops['++'],
+				_user$project$App$sizeToString(size),
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					' ',
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_user$project$App$typeToString(mtype),
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							' (',
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								_user$project$App$tagToString(tag),
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									'), ',
+									_user$project$App$alignmentToString(alignment)))))));
+		}
+	});
+var _user$project$App$display = function (model) {
+	return A2(
+		_elm_lang$html$Html$div,
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html_Attributes$class('display'),
+			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$class('card'),
+					_1: {ctor: '[]'}
+				},
+				{
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$h2,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('name'),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(model.name),
+							_1: {ctor: '[]'}
+						}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$p,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$class('sub-label'),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(
+									A4(_user$project$App$displaySubHeader, model.size, model.mtype, model.tag, model.alignment)),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$div,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$class('divider'),
+									_1: {ctor: '[]'}
+								},
+								{ctor: '[]'}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_user$project$App$displayLabelValue,
+									'Armor Class ',
+									_elm_lang$core$Basics$toString(model.armorClass)),
+								_1: {
+									ctor: '::',
+									_0: A2(_user$project$App$displayLabelValue, 'Hit Points ', model.hitPoints),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_user$project$App$displayLabelValue,
+											'Speed ',
+											_user$project$App$displaySpeed(model.speed)),
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
+					}
+				}),
+			_1: {ctor: '[]'}
+		});
+};
 var _user$project$App$Model = F8(
 	function (a, b, c, d, e, f, g, h) {
 		return {name: a, size: b, mtype: c, tag: d, alignment: e, armorClass: f, hitPoints: g, speed: h};
@@ -465,59 +769,70 @@ var _user$project$App$view = function (model) {
 		{
 			ctor: '::',
 			_0: A2(
-				_elm_lang$html$Html$input,
+				_elm_lang$html$Html$div,
+				{ctor: '[]'},
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$value(model.name),
-					_1: {
-						ctor: '::',
-						_0: _elm_lang$html$Html_Attributes$placeholder('Name'),
-						_1: {
+					_0: A2(
+						_elm_lang$html$Html$input,
+						{
 							ctor: '::',
-							_0: _elm_lang$html$Html_Events$onInput(_user$project$App$UpdateName),
-							_1: {ctor: '[]'}
-						}
-					}
-				},
-				{ctor: '[]'}),
-			_1: {
-				ctor: '::',
-				_0: A4(_user$project$App$selectAndLabel, 'Size', _user$project$App$sizeWithLabel, model.size, _user$project$App$UpdateSize),
-				_1: {
-					ctor: '::',
-					_0: A4(_user$project$App$selectAndLabel, 'Type', _user$project$App$typeWithLabel, model.mtype, _user$project$App$UpdateType),
-					_1: {
-						ctor: '::',
-						_0: A4(_user$project$App$selectAndLabel, 'Tag', _user$project$App$tagWithLabel, model.tag, _user$project$App$UpdateTag),
-						_1: {
-							ctor: '::',
-							_0: A4(_user$project$App$selectAndLabel, 'Alignment', _user$project$App$alignmentWithLabel, model.alignment, _user$project$App$UpdateAlignment),
+							_0: _elm_lang$html$Html_Attributes$value(model.name),
 							_1: {
 								ctor: '::',
-								_0: A4(
-									_user$project$App$inputAndLabel,
-									'Armor Class',
-									_elm_lang$core$Basics$toString(model.armorClass),
-									_user$project$App$UpdateArmorClass,
-									'number'),
+								_0: _elm_lang$html$Html_Attributes$placeholder('Name'),
 								_1: {
 									ctor: '::',
-									_0: A4(_user$project$App$inputAndLabel, 'Hit Points', model.hitPoints, _user$project$App$UpdateHitPoints, 'text'),
+									_0: _elm_lang$html$Html_Events$onInput(_user$project$App$UpdateName),
+									_1: {ctor: '[]'}
+								}
+							}
+						},
+						{ctor: '[]'}),
+					_1: {
+						ctor: '::',
+						_0: A4(_user$project$App$selectAndLabel, 'Size', _user$project$App$sizeWithLabel, model.size, _user$project$App$UpdateSize),
+						_1: {
+							ctor: '::',
+							_0: A4(_user$project$App$selectAndLabel, 'Type', _user$project$App$typeWithLabel, model.mtype, _user$project$App$UpdateType),
+							_1: {
+								ctor: '::',
+								_0: A4(_user$project$App$selectAndLabel, 'Tag', _user$project$App$tagWithLabel, model.tag, _user$project$App$UpdateTag),
+								_1: {
+									ctor: '::',
+									_0: A4(_user$project$App$selectAndLabel, 'Alignment', _user$project$App$alignmentWithLabel, model.alignment, _user$project$App$UpdateAlignment),
 									_1: {
 										ctor: '::',
 										_0: A4(
 											_user$project$App$inputAndLabel,
-											'Speed',
-											_elm_lang$core$Basics$toString(model.speed),
-											_user$project$App$UpdateSpeed,
+											'Armor Class',
+											_elm_lang$core$Basics$toString(model.armorClass),
+											_user$project$App$UpdateArmorClass,
 											'number'),
-										_1: {ctor: '[]'}
+										_1: {
+											ctor: '::',
+											_0: A4(_user$project$App$inputAndLabel, 'Hit Points', model.hitPoints, _user$project$App$UpdateHitPoints, 'text'),
+											_1: {
+												ctor: '::',
+												_0: A4(
+													_user$project$App$inputAndLabel,
+													'Speed',
+													_elm_lang$core$Basics$toString(model.speed),
+													_user$project$App$UpdateSpeed,
+													'number'),
+												_1: {ctor: '[]'}
+											}
+										}
 									}
 								}
 							}
 						}
 					}
-				}
+				}),
+			_1: {
+				ctor: '::',
+				_0: _user$project$App$display(model),
+				_1: {ctor: '[]'}
 			}
 		});
 };
