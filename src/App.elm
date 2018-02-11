@@ -235,8 +235,8 @@ update msg model =
 
 view : Model -> Html.Html Msg
 view model =
-  Html.div []
-  [ Html.div []
+  Html.div [ Html.Attributes.class "app" ]
+  [ Html.div [ Html.Attributes.class "config" ]
     [ Html.input
       [ Html.Attributes.value model.name
         , Html.Attributes.placeholder "Name"

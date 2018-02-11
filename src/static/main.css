@@ -1,0 +1,63 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.app {
+  display: flex;
+  font-family: 'Roboto', sans-serif;
+}
+
+.content {
+  height: 100%;
+}
+
+.monster-generator {
+  display: flex;
+  flex-direction: row;
+  height: 100%
+}
+
+.config {
+  flex: 1;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: auto;
+  padding: 10px;
+}
+
+.display {
+  flex: 1;
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: auto;
+  color: #7D2D41;
+  padding: 10px;
+}
+
+.card {
+  background-color: #F8ECC2;
+  box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  padding: 5px;
+}
+
+.header {
+  margin: 0;
+}
+
+.sub-label {
+  margin: 0;
+  font-size: 10pt;
+  font-style: italic;
+}
+
+.divider {
+  margin: 5px 0 5px 0;
+  height: 5px;
+  width: 100%;
+  background-color: #7D2D41;
+}
+
+.label {
+  margin: 0;
+}
