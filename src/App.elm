@@ -15,6 +15,11 @@ type alias Model =
   , armorClass: Int
   , hitPoints: String
   , speed: Int
+  , swim: Int
+  , fly: Int
+  , hover: Bool
+  , burrow: Int
+  , climb: Int
   }
 
 model : Model
@@ -27,6 +32,11 @@ model =
   , armorClass = 10
   , hitPoints = ""
   , speed = 30
+  , swim = 0
+  , fly = 0
+  , hover = False
+  , burrow = 0
+  , climb = 0
   }
 
 type Size = Tiny | Small | Medium | Large | Huge | Gargantuan
@@ -199,6 +209,11 @@ type Msg
   | UpdateArmorClass String
   | UpdateHitPoints String
   | UpdateSpeed String
+  | UpdateSwim String
+  | UpdateFly String
+  | UpdateHover Bool
+  | UpdateBurrow String
+  | UpdateClimb String
 
 update : Msg -> Model -> Model
 update msg model =
@@ -219,17 +234,34 @@ update msg model =
       { model | alignment = alignment }
 
     UpdateArmorClass string ->
-      case String.toInt string of
-        Result.Err str -> model
-        Ok number -> { model | armorClass = number }
+      { model | armorClass = unwrapInt model.armorClass string }
 
     UpdateHitPoints hitPoints ->
       { model | hitPoints = hitPoints }
 
     UpdateSpeed string ->
-      case String.toInt string of
-        Result.Err str -> model
-        Ok number -> { model | speed = number }
+      { model | speed = unwrapInt model.speed string }
+
+    UpdateSwim string ->
+      { model | swim = unwrapInt model.swim string }
+
+    UpdateFly string ->
+      { model | fly = unwrapInt model.fly string }
+
+    UpdateHover value ->
+      { model | hover = value }
+
+    UpdateBurrow string ->
+      { model | burrow = unwrapInt model.burrow string }
+
+    UpdateClimb string ->
+      { model | climb = unwrapInt model.climb string }
+
+unwrapInt : Int -> String -> Int
+unwrapInt default value =
+  case String.toInt value of
+    Result.Err str -> default
+    Ok number -> number
 
 -- VIEW
 
@@ -249,6 +281,11 @@ view model =
     , inputAndLabel "Armor Class" (toString model.armorClass) UpdateArmorClass "number"
     , inputAndLabel "Hit Points" model.hitPoints UpdateHitPoints "text"
     , inputAndLabel "Speed" (toString model.speed) UpdateSpeed "number"
+    , inputAndLabel "Swim" (toString model.swim) UpdateSwim "number"
+    , inputAndLabel "Fly" (toString model.fly) UpdateFly "number"
+    , checkbox "Hover" model.hover UpdateHover
+    , inputAndLabel "Burrow" (toString model.burrow) UpdateBurrow "number"
+    , inputAndLabel "Climb" (toString model.climb) UpdateClimb "number"
     ]
   , display model
   ]
@@ -264,13 +301,17 @@ display model =
       , Html.div [ Html.Attributes.class "divider" ] []
       , displayLabelValue "Armor Class " <| toString <| model.armorClass
       , displayLabelValue "Hit Points " model.hitPoints
-      , displayLabelValue "Speed " <| displaySpeed <| model.speed
+      , displayLabelValue "Speed " <| displayDistance <| model.speed
+      , displayLabelValue "Swim " <| displayDistance <| model.swim
+      , displayLabelValue "Fly " <| displayDistance <| model.fly
+      , displayLabelValue "Burrow " <| displayDistance <| model.burrow
+      , displayLabelValue "Climb " <| displayDistance <| model.climb
       ]
     ]
 
-displaySpeed : Int -> String
-displaySpeed speed =
-  toString speed ++ " ft."
+displayDistance : Int -> String
+displayDistance distance =
+  toString distance ++ " ft."
 
 displayLabelValue : String -> String -> Html.Html Msg
 displayLabelValue label value =
@@ -294,6 +335,18 @@ inputAndLabel label currentValue update inputType =
     , Html.Events.onInput update
     , Html.Attributes.type_ inputType
     ] []
+  ]
+
+checkbox : String -> Bool -> (Bool -> Msg) -> Html.Html Msg
+checkbox label checked update =
+  Html.label []
+  [ Html.input
+    [ Html.Attributes.value (if checked then "checked" else "")
+    , Html.Events.onInput (\str -> update <| not checked)
+    , Html.Attributes.type_ "checkbox"
+    ]
+    []
+  , Html.text label
   ]
 
 selectAndLabel : String -> List ( a, String ) -> a -> (a -> Msg) -> Html.Html Msg
