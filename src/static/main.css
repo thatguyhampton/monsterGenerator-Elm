@@ -35,6 +35,15 @@ body {
   padding: 10px;
 }
 
+.ability-scores {
+  display: flex;
+  text-align: center;
+}
+
+.ability-scores div {
+  flex: 1
+}
+
 .card {
   background-color: #F8ECC2;
   box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);

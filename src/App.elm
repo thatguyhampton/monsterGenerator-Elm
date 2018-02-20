@@ -20,6 +20,18 @@ type alias Model =
   , hover: Bool
   , burrow: Int
   , climb: Int
+  , abilityStr: Int
+  , abilityDex: Int
+  , abilityCon: Int
+  , abilityInt: Int
+  , abilityWis: Int
+  , abilityCha: Int
+  , saveStr: Int
+  , saveDex: Int
+  , saveCon: Int
+  , saveInt: Int
+  , saveWis: Int
+  , saveCha: Int
   }
 
 model : Model
@@ -37,6 +49,18 @@ model =
   , hover = False
   , burrow = 0
   , climb = 0
+  , abilityStr = 10
+  , abilityDex = 10
+  , abilityCon = 10
+  , abilityInt = 10
+  , abilityWis = 10
+  , abilityCha = 10
+  , saveStr = 0
+  , saveDex = 0
+  , saveCon = 0
+  , saveInt = 0
+  , saveWis = 0
+  , saveCha = 0
   }
 
 type Size = Tiny | Small | Medium | Large | Huge | Gargantuan
@@ -214,6 +238,18 @@ type Msg
   | UpdateHover Bool
   | UpdateBurrow String
   | UpdateClimb String
+  | UpdateAbilityStr String
+  | UpdateAbilityDex String
+  | UpdateAbilityCon String
+  | UpdateAbilityInt String
+  | UpdateAbilityWis String
+  | UpdateAbilityCha String
+  | UpdateSaveStr String
+  | UpdateSaveDex String
+  | UpdateSaveCon String
+  | UpdateSaveInt String
+  | UpdateSaveWis String
+  | UpdateSaveCha String
 
 update : Msg -> Model -> Model
 update msg model =
@@ -257,6 +293,42 @@ update msg model =
     UpdateClimb string ->
       { model | climb = unwrapInt model.climb string }
 
+    UpdateAbilityStr string ->
+      { model | abilityStr = unwrapInt model.abilityStr string }
+
+    UpdateAbilityDex string ->
+      { model | abilityDex = unwrapInt model.abilityDex string }
+
+    UpdateAbilityCon string ->
+      { model | abilityCon = unwrapInt model.abilityCon string }
+
+    UpdateAbilityInt string ->
+      { model | abilityInt = unwrapInt model.abilityInt string }
+
+    UpdateAbilityWis string ->
+      { model | abilityWis = unwrapInt model.abilityWis string }
+
+    UpdateAbilityCha string ->
+      { model | abilityCha = unwrapInt model.abilityCha string }
+
+    UpdateSaveStr string ->
+      { model | saveStr = unwrapInt model.saveStr string }
+
+    UpdateSaveDex string ->
+      { model | saveDex = unwrapInt model.saveDex string }
+
+    UpdateSaveCon string ->
+      { model | saveCon = unwrapInt model.saveCon string }
+
+    UpdateSaveInt string ->
+      { model | saveInt = unwrapInt model.saveInt string }
+
+    UpdateSaveWis string ->
+      { model | saveWis = unwrapInt model.saveWis string }
+
+    UpdateSaveCha string ->
+      { model | saveCha = unwrapInt model.saveCha string }
+
 unwrapInt : Int -> String -> Int
 unwrapInt default value =
   case String.toInt value of
@@ -286,6 +358,20 @@ view model =
     , checkbox "Hover" model.hover UpdateHover
     , inputAndLabel "Burrow" (toString model.burrow) UpdateBurrow "number"
     , inputAndLabel "Climb" (toString model.climb) UpdateClimb "number"
+    , Html.p [] [ Html.text "Ability Scores" ]
+    , inputAndLabel "STR" (toString model.abilityStr) UpdateAbilityStr "number"
+    , inputAndLabel "DEX" (toString model.abilityDex) UpdateAbilityDex "number"
+    , inputAndLabel "CON" (toString model.abilityCon) UpdateAbilityCon "number"
+    , inputAndLabel "INT" (toString model.abilityInt) UpdateAbilityInt "number"
+    , inputAndLabel "WIS" (toString model.abilityWis) UpdateAbilityWis "number"
+    , inputAndLabel "CHA" (toString model.abilityCha) UpdateAbilityCha "number"
+    , Html.p [] [ Html.text "Saving Throw Bonuses" ]
+    , inputAndLabel "STR" (toString model.saveStr) UpdateSaveStr "number"
+    , inputAndLabel "DEX" (toString model.saveDex) UpdateSaveDex "number"
+    , inputAndLabel "CON" (toString model.saveCon) UpdateSaveCon "number"
+    , inputAndLabel "INT" (toString model.saveInt) UpdateSaveInt "number"
+    , inputAndLabel "WIS" (toString model.saveWis) UpdateSaveWis "number"
+    , inputAndLabel "CHA" (toString model.saveCha) UpdateSaveCha "number"
     ]
   , display model
   ]
@@ -306,8 +392,30 @@ display model =
       , displayLabelValue "Fly " <| displayDistance <| model.fly
       , displayLabelValue "Burrow " <| displayDistance <| model.burrow
       , displayLabelValue "Climb " <| displayDistance <| model.climb
+      , Html.div [ Html.Attributes.class "divider" ] []
+      , Html.div [ Html.Attributes.class "ability-scores" ]
+        [ displayAbilityScore "STR" model.abilityStr
+        , displayAbilityScore "DEX" model.abilityDex
+        , displayAbilityScore "CON" model.abilityCon
+        , displayAbilityScore "INT" model.abilityInt
+        , displayAbilityScore "WIS" model.abilityWis
+        , displayAbilityScore "CHA" model.abilityCha
+        ]
+      , Html.div [ Html.Attributes.class "divider" ] []
       ]
     ]
+
+displayAbilityScore : String -> Int -> Html.Html Msg
+displayAbilityScore label value =
+  let
+    bonus = floor <| (toFloat value - 10) / 2
+    bonusString = if bonus < 0 then toString bonus else "+" ++ toString bonus
+    displayValue = toString value ++ " (" ++ bonusString ++ ")"
+  in
+    Html.div []
+      [ Html.p [] [ Html.b [] [ Html.text label ] ]
+      , Html.p [] [ Html.text displayValue ]
+      ]
 
 displayDistance : Int -> String
 displayDistance distance =
@@ -379,23 +487,3 @@ selectFromValuesWithLabels valuesWithLabels currentValue update =
     Html.select
       [ Html.Events.onInput (update << valueFromLabel) ]
       (options valuesWithLabels currentValue)
-
--- needs to be fixed as it is not updating fields correctly
--- selectFromValuesWithLabels : List ( a, String ) -> a -> (a -> Msg) -> Html.Html Msg
--- selectFromValuesWithLabels valuesWithLabels currentValue update =
---   let
---     optionForTuple ( value, label ) =
---       let ignoreInput (string) = update value
---       in
---         Html.option
---           [ Html.Attributes.selected (currentValue == value)
---           , Html.Events.onInput ignoreInput
---           ]
---           [ Html.text label ]
---
---     options valuesWithLabels currentValue =
---       List.map optionForTuple valuesWithLabels
---   in
---     Html.select
---       []
---       (options valuesWithLabels currentValue)

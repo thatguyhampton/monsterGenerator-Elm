@@ -8335,6 +8335,40 @@ var _user$project$App$selectAndLabel = F4(
 				}
 			});
 	});
+var _user$project$App$checkbox = F3(
+	function (label, checked, update) {
+		return A2(
+			_elm_lang$html$Html$label,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$input,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$value(
+							checked ? 'checked' : ''),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Events$onInput(
+								function (str) {
+									return update(!checked);
+								}),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$type_('checkbox'),
+								_1: {ctor: '[]'}
+							}
+						}
+					},
+					{ctor: '[]'}),
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$html$Html$text(label),
+					_1: {ctor: '[]'}
+				}
+			});
+	});
 var _user$project$App$inputAndLabel = F4(
 	function (label, currentValue, update, inputType) {
 		return A2(
@@ -8398,63 +8432,215 @@ var _user$project$App$displayLabelValue = F2(
 				}
 			});
 	});
-var _user$project$App$displaySpeed = function (speed) {
+var _user$project$App$displayDistance = function (distance) {
 	return A2(
 		_elm_lang$core$Basics_ops['++'],
-		_elm_lang$core$Basics$toString(speed),
+		_elm_lang$core$Basics$toString(distance),
 		' ft.');
 };
+var _user$project$App$displayAbilityScore = F2(
+	function (label, value) {
+		var bonus = _elm_lang$core$Basics$floor(
+			(_elm_lang$core$Basics$toFloat(value) - 10) / 2);
+		var bonusString = (_elm_lang$core$Native_Utils.cmp(bonus, 0) < 0) ? _elm_lang$core$Basics$toString(bonus) : A2(
+			_elm_lang$core$Basics_ops['++'],
+			'+',
+			_elm_lang$core$Basics$toString(bonus));
+		var displayValue = A2(
+			_elm_lang$core$Basics_ops['++'],
+			_elm_lang$core$Basics$toString(value),
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				' (',
+				A2(_elm_lang$core$Basics_ops['++'], bonusString, ')')));
+		return A2(
+			_elm_lang$html$Html$div,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$p,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$b,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(label),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$p,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(displayValue),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+var _user$project$App$unwrapInt = F2(
+	function ($default, value) {
+		var _p6 = _elm_lang$core$String$toInt(value);
+		if (_p6.ctor === 'Err') {
+			return $default;
+		} else {
+			return _p6._0;
+		}
+	});
 var _user$project$App$update = F2(
 	function (msg, model) {
-		var _p6 = msg;
-		switch (_p6.ctor) {
+		var _p7 = msg;
+		switch (_p7.ctor) {
 			case 'UpdateName':
 				return _elm_lang$core$Native_Utils.update(
 					model,
-					{name: _p6._0});
+					{name: _p7._0});
 			case 'UpdateSize':
 				return _elm_lang$core$Native_Utils.update(
 					model,
-					{size: _p6._0});
+					{size: _p7._0});
 			case 'UpdateType':
 				return _elm_lang$core$Native_Utils.update(
 					model,
-					{mtype: _p6._0});
+					{mtype: _p7._0});
 			case 'UpdateTag':
 				return _elm_lang$core$Native_Utils.update(
 					model,
-					{tag: _p6._0});
+					{tag: _p7._0});
 			case 'UpdateAlignment':
 				return _elm_lang$core$Native_Utils.update(
 					model,
-					{alignment: _p6._0});
+					{alignment: _p7._0});
 			case 'UpdateArmorClass':
-				var _p7 = _elm_lang$core$String$toInt(_p6._0);
-				if (_p7.ctor === 'Err') {
-					return model;
-				} else {
-					return _elm_lang$core$Native_Utils.update(
-						model,
-						{armorClass: _p7._0});
-				}
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						armorClass: A2(_user$project$App$unwrapInt, model.armorClass, _p7._0)
+					});
 			case 'UpdateHitPoints':
 				return _elm_lang$core$Native_Utils.update(
 					model,
-					{hitPoints: _p6._0});
+					{hitPoints: _p7._0});
+			case 'UpdateSpeed':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						speed: A2(_user$project$App$unwrapInt, model.speed, _p7._0)
+					});
+			case 'UpdateSwim':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						swim: A2(_user$project$App$unwrapInt, model.swim, _p7._0)
+					});
+			case 'UpdateFly':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						fly: A2(_user$project$App$unwrapInt, model.fly, _p7._0)
+					});
+			case 'UpdateHover':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{hover: _p7._0});
+			case 'UpdateBurrow':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						burrow: A2(_user$project$App$unwrapInt, model.burrow, _p7._0)
+					});
+			case 'UpdateClimb':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						climb: A2(_user$project$App$unwrapInt, model.climb, _p7._0)
+					});
+			case 'UpdateAbilityStr':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						abilityStr: A2(_user$project$App$unwrapInt, model.abilityStr, _p7._0)
+					});
+			case 'UpdateAbilityDex':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						abilityDex: A2(_user$project$App$unwrapInt, model.abilityDex, _p7._0)
+					});
+			case 'UpdateAbilityCon':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						abilityCon: A2(_user$project$App$unwrapInt, model.abilityCon, _p7._0)
+					});
+			case 'UpdateAbilityInt':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						abilityInt: A2(_user$project$App$unwrapInt, model.abilityInt, _p7._0)
+					});
+			case 'UpdateAbilityWis':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						abilityWis: A2(_user$project$App$unwrapInt, model.abilityWis, _p7._0)
+					});
+			case 'UpdateAbilityCha':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						abilityCha: A2(_user$project$App$unwrapInt, model.abilityCha, _p7._0)
+					});
+			case 'UpdateSaveStr':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						saveStr: A2(_user$project$App$unwrapInt, model.saveStr, _p7._0)
+					});
+			case 'UpdateSaveDex':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						saveDex: A2(_user$project$App$unwrapInt, model.saveDex, _p7._0)
+					});
+			case 'UpdateSaveCon':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						saveCon: A2(_user$project$App$unwrapInt, model.saveCon, _p7._0)
+					});
+			case 'UpdateSaveInt':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						saveInt: A2(_user$project$App$unwrapInt, model.saveInt, _p7._0)
+					});
+			case 'UpdateSaveWis':
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						saveWis: A2(_user$project$App$unwrapInt, model.saveWis, _p7._0)
+					});
 			default:
-				var _p8 = _elm_lang$core$String$toInt(_p6._0);
-				if (_p8.ctor === 'Err') {
-					return model;
-				} else {
-					return _elm_lang$core$Native_Utils.update(
-						model,
-						{speed: _p8._0});
-				}
+				return _elm_lang$core$Native_Utils.update(
+					model,
+					{
+						saveCha: A2(_user$project$App$unwrapInt, model.saveCha, _p7._0)
+					});
 		}
 	});
 var _user$project$App$alignmentToString = function (alignment) {
-	var _p9 = alignment;
-	switch (_p9.ctor) {
+	var _p8 = alignment;
+	switch (_p8.ctor) {
 		case 'LawfulGood':
 			return 'Lawful Good';
 		case 'LawfulNeutral':
@@ -8476,8 +8662,8 @@ var _user$project$App$alignmentToString = function (alignment) {
 	}
 };
 var _user$project$App$tagToString = function (tag) {
-	var _p10 = tag;
-	switch (_p10.ctor) {
+	var _p9 = tag;
+	switch (_p9.ctor) {
 		case 'None':
 			return 'None';
 		case 'Aarakocra':
@@ -8535,8 +8721,8 @@ var _user$project$App$tagToString = function (tag) {
 	}
 };
 var _user$project$App$typeToString = function (mtype) {
-	var _p11 = mtype;
-	switch (_p11.ctor) {
+	var _p10 = mtype;
+	switch (_p10.ctor) {
 		case 'Other':
 			return 'Other';
 		case 'Aberration':
@@ -8570,8 +8756,8 @@ var _user$project$App$typeToString = function (mtype) {
 	}
 };
 var _user$project$App$sizeToString = function (size) {
-	var _p12 = size;
-	switch (_p12.ctor) {
+	var _p11 = size;
+	switch (_p11.ctor) {
 		case 'Tiny':
 			return 'Tiny';
 		case 'Small':
@@ -8588,8 +8774,8 @@ var _user$project$App$sizeToString = function (size) {
 };
 var _user$project$App$displaySubHeader = F4(
 	function (size, mtype, tag, alignment) {
-		var _p13 = tag;
-		if (_p13.ctor === 'None') {
+		var _p12 = tag;
+		if (_p12.ctor === 'None') {
 			return A2(
 				_elm_lang$core$Basics_ops['++'],
 				_user$project$App$sizeToString(size),
@@ -8695,8 +8881,93 @@ var _user$project$App$display = function (model) {
 										_0: A2(
 											_user$project$App$displayLabelValue,
 											'Speed ',
-											_user$project$App$displaySpeed(model.speed)),
-										_1: {ctor: '[]'}
+											_user$project$App$displayDistance(model.speed)),
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_user$project$App$displayLabelValue,
+												'Swim ',
+												_user$project$App$displayDistance(model.swim)),
+											_1: {
+												ctor: '::',
+												_0: A2(
+													_user$project$App$displayLabelValue,
+													'Fly ',
+													_user$project$App$displayDistance(model.fly)),
+												_1: {
+													ctor: '::',
+													_0: A2(
+														_user$project$App$displayLabelValue,
+														'Burrow ',
+														_user$project$App$displayDistance(model.burrow)),
+													_1: {
+														ctor: '::',
+														_0: A2(
+															_user$project$App$displayLabelValue,
+															'Climb ',
+															_user$project$App$displayDistance(model.climb)),
+														_1: {
+															ctor: '::',
+															_0: A2(
+																_elm_lang$html$Html$div,
+																{
+																	ctor: '::',
+																	_0: _elm_lang$html$Html_Attributes$class('divider'),
+																	_1: {ctor: '[]'}
+																},
+																{ctor: '[]'}),
+															_1: {
+																ctor: '::',
+																_0: A2(
+																	_elm_lang$html$Html$div,
+																	{
+																		ctor: '::',
+																		_0: _elm_lang$html$Html_Attributes$class('ability-scores'),
+																		_1: {ctor: '[]'}
+																	},
+																	{
+																		ctor: '::',
+																		_0: A2(_user$project$App$displayAbilityScore, 'STR', model.abilityStr),
+																		_1: {
+																			ctor: '::',
+																			_0: A2(_user$project$App$displayAbilityScore, 'DEX', model.abilityDex),
+																			_1: {
+																				ctor: '::',
+																				_0: A2(_user$project$App$displayAbilityScore, 'CON', model.abilityCon),
+																				_1: {
+																					ctor: '::',
+																					_0: A2(_user$project$App$displayAbilityScore, 'INT', model.abilityInt),
+																					_1: {
+																						ctor: '::',
+																						_0: A2(_user$project$App$displayAbilityScore, 'WIS', model.abilityWis),
+																						_1: {
+																							ctor: '::',
+																							_0: A2(_user$project$App$displayAbilityScore, 'CHA', model.abilityCha),
+																							_1: {ctor: '[]'}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}),
+																_1: {
+																	ctor: '::',
+																	_0: A2(
+																		_elm_lang$html$Html$div,
+																		{
+																			ctor: '::',
+																			_0: _elm_lang$html$Html_Attributes$class('divider'),
+																			_1: {ctor: '[]'}
+																		},
+																		{ctor: '[]'}),
+																	_1: {ctor: '[]'}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
 									}
 								}
 							}
@@ -8706,10 +8977,57 @@ var _user$project$App$display = function (model) {
 			_1: {ctor: '[]'}
 		});
 };
-var _user$project$App$Model = F8(
-	function (a, b, c, d, e, f, g, h) {
-		return {name: a, size: b, mtype: c, tag: d, alignment: e, armorClass: f, hitPoints: g, speed: h};
-	});
+var _user$project$App$Model = function (a) {
+	return function (b) {
+		return function (c) {
+			return function (d) {
+				return function (e) {
+					return function (f) {
+						return function (g) {
+							return function (h) {
+								return function (i) {
+									return function (j) {
+										return function (k) {
+											return function (l) {
+												return function (m) {
+													return function (n) {
+														return function (o) {
+															return function (p) {
+																return function (q) {
+																	return function (r) {
+																		return function (s) {
+																			return function (t) {
+																				return function (u) {
+																					return function (v) {
+																						return function (w) {
+																							return function (x) {
+																								return function (y) {
+																									return {name: a, size: b, mtype: c, tag: d, alignment: e, armorClass: f, hitPoints: g, speed: h, swim: i, fly: j, hover: k, burrow: l, climb: m, abilityStr: n, abilityDex: o, abilityCon: p, abilityInt: q, abilityWis: r, abilityCha: s, saveStr: t, saveDex: u, saveCon: v, saveInt: w, saveWis: x, saveCha: y};
+																								};
+																							};
+																						};
+																					};
+																				};
+																			};
+																		};
+																	};
+																};
+															};
+														};
+													};
+												};
+											};
+										};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
+		};
+	};
+};
 var _user$project$App$Gargantuan = {ctor: 'Gargantuan'};
 var _user$project$App$Huge = {ctor: 'Huge'};
 var _user$project$App$Large = {ctor: 'Large'};
@@ -8958,7 +9276,7 @@ var _user$project$App$ChaoticNeutral = {ctor: 'ChaoticNeutral'};
 var _user$project$App$ChaoticGood = {ctor: 'ChaoticGood'};
 var _user$project$App$NeutralEvil = {ctor: 'NeutralEvil'};
 var _user$project$App$TrueNeutral = {ctor: 'TrueNeutral'};
-var _user$project$App$model = {name: '', size: _user$project$App$Medium, mtype: _user$project$App$Other, tag: _user$project$App$None, alignment: _user$project$App$TrueNeutral, armorClass: 10, hitPoints: '', speed: 30};
+var _user$project$App$model = {name: '', size: _user$project$App$Medium, mtype: _user$project$App$Other, tag: _user$project$App$None, alignment: _user$project$App$TrueNeutral, armorClass: 10, hitPoints: '', speed: 30, swim: 0, fly: 0, hover: false, burrow: 0, climb: 0, abilityStr: 10, abilityDex: 10, abilityCon: 10, abilityInt: 10, abilityWis: 10, abilityCha: 10, saveStr: 0, saveDex: 0, saveCon: 0, saveInt: 0, saveWis: 0, saveCha: 0};
 var _user$project$App$NeutralGood = {ctor: 'NeutralGood'};
 var _user$project$App$LawfulEvil = {ctor: 'LawfulEvil'};
 var _user$project$App$LawfulNeutral = {ctor: 'LawfulNeutral'};
@@ -8999,6 +9317,57 @@ var _user$project$App$alignmentWithLabel = {
 			}
 		}
 	}
+};
+var _user$project$App$UpdateSaveCha = function (a) {
+	return {ctor: 'UpdateSaveCha', _0: a};
+};
+var _user$project$App$UpdateSaveWis = function (a) {
+	return {ctor: 'UpdateSaveWis', _0: a};
+};
+var _user$project$App$UpdateSaveInt = function (a) {
+	return {ctor: 'UpdateSaveInt', _0: a};
+};
+var _user$project$App$UpdateSaveCon = function (a) {
+	return {ctor: 'UpdateSaveCon', _0: a};
+};
+var _user$project$App$UpdateSaveDex = function (a) {
+	return {ctor: 'UpdateSaveDex', _0: a};
+};
+var _user$project$App$UpdateSaveStr = function (a) {
+	return {ctor: 'UpdateSaveStr', _0: a};
+};
+var _user$project$App$UpdateAbilityCha = function (a) {
+	return {ctor: 'UpdateAbilityCha', _0: a};
+};
+var _user$project$App$UpdateAbilityWis = function (a) {
+	return {ctor: 'UpdateAbilityWis', _0: a};
+};
+var _user$project$App$UpdateAbilityInt = function (a) {
+	return {ctor: 'UpdateAbilityInt', _0: a};
+};
+var _user$project$App$UpdateAbilityCon = function (a) {
+	return {ctor: 'UpdateAbilityCon', _0: a};
+};
+var _user$project$App$UpdateAbilityDex = function (a) {
+	return {ctor: 'UpdateAbilityDex', _0: a};
+};
+var _user$project$App$UpdateAbilityStr = function (a) {
+	return {ctor: 'UpdateAbilityStr', _0: a};
+};
+var _user$project$App$UpdateClimb = function (a) {
+	return {ctor: 'UpdateClimb', _0: a};
+};
+var _user$project$App$UpdateBurrow = function (a) {
+	return {ctor: 'UpdateBurrow', _0: a};
+};
+var _user$project$App$UpdateHover = function (a) {
+	return {ctor: 'UpdateHover', _0: a};
+};
+var _user$project$App$UpdateFly = function (a) {
+	return {ctor: 'UpdateFly', _0: a};
+};
+var _user$project$App$UpdateSwim = function (a) {
+	return {ctor: 'UpdateSwim', _0: a};
 };
 var _user$project$App$UpdateSpeed = function (a) {
 	return {ctor: 'UpdateSpeed', _0: a};
@@ -9090,7 +9459,177 @@ var _user$project$App$view = function (model) {
 													_elm_lang$core$Basics$toString(model.speed),
 													_user$project$App$UpdateSpeed,
 													'number'),
-												_1: {ctor: '[]'}
+												_1: {
+													ctor: '::',
+													_0: A4(
+														_user$project$App$inputAndLabel,
+														'Swim',
+														_elm_lang$core$Basics$toString(model.swim),
+														_user$project$App$UpdateSwim,
+														'number'),
+													_1: {
+														ctor: '::',
+														_0: A4(
+															_user$project$App$inputAndLabel,
+															'Fly',
+															_elm_lang$core$Basics$toString(model.fly),
+															_user$project$App$UpdateFly,
+															'number'),
+														_1: {
+															ctor: '::',
+															_0: A3(_user$project$App$checkbox, 'Hover', model.hover, _user$project$App$UpdateHover),
+															_1: {
+																ctor: '::',
+																_0: A4(
+																	_user$project$App$inputAndLabel,
+																	'Burrow',
+																	_elm_lang$core$Basics$toString(model.burrow),
+																	_user$project$App$UpdateBurrow,
+																	'number'),
+																_1: {
+																	ctor: '::',
+																	_0: A4(
+																		_user$project$App$inputAndLabel,
+																		'Climb',
+																		_elm_lang$core$Basics$toString(model.climb),
+																		_user$project$App$UpdateClimb,
+																		'number'),
+																	_1: {
+																		ctor: '::',
+																		_0: A2(
+																			_elm_lang$html$Html$p,
+																			{ctor: '[]'},
+																			{
+																				ctor: '::',
+																				_0: _elm_lang$html$Html$text('Ability Scores'),
+																				_1: {ctor: '[]'}
+																			}),
+																		_1: {
+																			ctor: '::',
+																			_0: A4(
+																				_user$project$App$inputAndLabel,
+																				'STR',
+																				_elm_lang$core$Basics$toString(model.abilityStr),
+																				_user$project$App$UpdateAbilityStr,
+																				'number'),
+																			_1: {
+																				ctor: '::',
+																				_0: A4(
+																					_user$project$App$inputAndLabel,
+																					'DEX',
+																					_elm_lang$core$Basics$toString(model.abilityDex),
+																					_user$project$App$UpdateAbilityDex,
+																					'number'),
+																				_1: {
+																					ctor: '::',
+																					_0: A4(
+																						_user$project$App$inputAndLabel,
+																						'CON',
+																						_elm_lang$core$Basics$toString(model.abilityCon),
+																						_user$project$App$UpdateAbilityCon,
+																						'number'),
+																					_1: {
+																						ctor: '::',
+																						_0: A4(
+																							_user$project$App$inputAndLabel,
+																							'INT',
+																							_elm_lang$core$Basics$toString(model.abilityInt),
+																							_user$project$App$UpdateAbilityInt,
+																							'number'),
+																						_1: {
+																							ctor: '::',
+																							_0: A4(
+																								_user$project$App$inputAndLabel,
+																								'WIS',
+																								_elm_lang$core$Basics$toString(model.abilityWis),
+																								_user$project$App$UpdateAbilityWis,
+																								'number'),
+																							_1: {
+																								ctor: '::',
+																								_0: A4(
+																									_user$project$App$inputAndLabel,
+																									'CHA',
+																									_elm_lang$core$Basics$toString(model.abilityCha),
+																									_user$project$App$UpdateAbilityCha,
+																									'number'),
+																								_1: {
+																									ctor: '::',
+																									_0: A2(
+																										_elm_lang$html$Html$p,
+																										{ctor: '[]'},
+																										{
+																											ctor: '::',
+																											_0: _elm_lang$html$Html$text('Saving Throw Bonuses'),
+																											_1: {ctor: '[]'}
+																										}),
+																									_1: {
+																										ctor: '::',
+																										_0: A4(
+																											_user$project$App$inputAndLabel,
+																											'STR',
+																											_elm_lang$core$Basics$toString(model.saveStr),
+																											_user$project$App$UpdateSaveStr,
+																											'number'),
+																										_1: {
+																											ctor: '::',
+																											_0: A4(
+																												_user$project$App$inputAndLabel,
+																												'DEX',
+																												_elm_lang$core$Basics$toString(model.saveDex),
+																												_user$project$App$UpdateSaveDex,
+																												'number'),
+																											_1: {
+																												ctor: '::',
+																												_0: A4(
+																													_user$project$App$inputAndLabel,
+																													'CON',
+																													_elm_lang$core$Basics$toString(model.saveCon),
+																													_user$project$App$UpdateSaveCon,
+																													'number'),
+																												_1: {
+																													ctor: '::',
+																													_0: A4(
+																														_user$project$App$inputAndLabel,
+																														'INT',
+																														_elm_lang$core$Basics$toString(model.saveInt),
+																														_user$project$App$UpdateSaveInt,
+																														'number'),
+																													_1: {
+																														ctor: '::',
+																														_0: A4(
+																															_user$project$App$inputAndLabel,
+																															'WIS',
+																															_elm_lang$core$Basics$toString(model.saveWis),
+																															_user$project$App$UpdateSaveWis,
+																															'number'),
+																														_1: {
+																															ctor: '::',
+																															_0: A4(
+																																_user$project$App$inputAndLabel,
+																																'CHA',
+																																_elm_lang$core$Basics$toString(model.saveCha),
+																																_user$project$App$UpdateSaveCha,
+																																'number'),
+																															_1: {ctor: '[]'}
+																														}
+																													}
+																												}
+																											}
+																										}
+																									}
+																								}
+																							}
+																						}
+																					}
+																				}
+																			}
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
 											}
 										}
 									}
