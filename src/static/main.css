@@ -41,7 +41,11 @@ body {
 }
 
 .ability-scores div {
-  flex: 1
+  flex: 1;
+}
+
+.ability-scores p {
+  margin: 0;
 }
 
 .card {

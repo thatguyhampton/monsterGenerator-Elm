@@ -402,8 +402,40 @@ display model =
         , displayAbilityScore "CHA" model.abilityCha
         ]
       , Html.div [ Html.Attributes.class "divider" ] []
+      , displayLabelValue "Saving Throws " <| displaySavingThrows model
       ]
     ]
+
+displaySavingThrows : Model -> String
+displaySavingThrows model =
+  let
+    savingThrows =
+      [ ( model.saveStr, "Str" )
+      , ( model.saveDex, "Dex" )
+      , ( model.saveCon, "Con" )
+      , ( model.saveInt, "Int" )
+      , ( model.saveWis, "Wis" )
+      , ( model.saveCha, "Cha" )
+      ]
+    format = (\(value, label) ->
+      if value > 0 then
+        label ++ " +" ++ toString value
+      else if value < 0 then
+        label ++ " " ++ toString value
+      else
+        ""
+    )
+    filter = (\string ->
+      if String.isEmpty string then
+        Nothing
+      else
+        Just string
+    )
+  in
+    savingThrows
+    |> List.map format
+    |> List.filterMap filter
+    |> String.join ", "
 
 displayAbilityScore : String -> Int -> Html.Html Msg
 displayAbilityScore label value =
