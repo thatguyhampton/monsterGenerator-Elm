@@ -2,6 +2,8 @@ module App exposing (app)
 import Html
 import Html.Attributes
 import Html.Events
+import Dict
+import Set
 
 app = Html.beginnerProgram { model = model, view = view, update = update }
 
@@ -32,6 +34,15 @@ type alias Model =
   , saveInt: Int
   , saveWis: Int
   , saveCha: Int
+  , skills : Dict.Dict Int Int
+  , skillToAdd : Skill
+  , skillValue : Int
+  , vulnerabilities : Set.Set Int
+  , vulnerabilityToAdd : DamageType
+  , resistances : Set.Set Int
+  , resistanceToAdd : DamageType
+  , immunities : Set.Set Int
+  , immunityToAdd : DamageType
   }
 
 model : Model
@@ -61,7 +72,192 @@ model =
   , saveInt = 0
   , saveWis = 0
   , saveCha = 0
+  , skills = Dict.empty
+  , skillToAdd = Acrobatics
+  , skillValue = 0
+  , vulnerabilities = Set.empty
+  , vulnerabilityToAdd = Acid
+  , resistances = Set.empty
+  , resistanceToAdd = Acid
+  , immunities = Set.empty
+  , immunityToAdd = Acid
   }
+
+type Skill = Acrobatics | AnimalHandling | Arcana | Athletics | Deception
+  | History | Insight | Intimidation | Investigation | Medicine | Nature
+  | Perception | Performance | Persuasion | Religion | SleightOfHand
+  | Stealth | Survival
+
+allSkills : List Skill
+allSkills =
+  [ Acrobatics
+  , AnimalHandling
+  , Arcana
+  , Athletics
+  , Deception
+  , History
+  , Insight
+  , Intimidation
+  , Investigation
+  , Medicine
+  , Nature
+  , Perception
+  , Performance
+  , Persuasion
+  , Religion
+  , SleightOfHand
+  , Stealth
+  , Survival
+  ]
+
+skillLabel : Skill -> String
+skillLabel skill =
+  case skill of
+    Acrobatics -> "Acrobatics"
+    AnimalHandling -> "Animal Handling"
+    Arcana -> "Arcana"
+    Athletics -> "Athletics"
+    Deception -> "Deception"
+    History -> "History"
+    Insight -> "Insight"
+    Intimidation -> "Intimidation"
+    Investigation -> "Investigation"
+    Medicine -> "Medicine"
+    Nature -> "Nature"
+    Perception -> "Perception"
+    Performance -> "Performance"
+    Persuasion -> "Persuasion"
+    Religion -> "Religion"
+    SleightOfHand -> "Sleight Of Hand"
+    Stealth -> "Stealth"
+    Survival -> "Survival"
+
+toInt : Skill -> Int
+toInt skill =
+  case skill of
+    Acrobatics -> 0
+    AnimalHandling -> 1
+    Arcana -> 2
+    Athletics -> 3
+    Deception -> 4
+    History -> 5
+    Insight -> 6
+    Intimidation -> 7
+    Investigation -> 8
+    Medicine -> 9
+    Nature -> 10
+    Perception -> 11
+    Performance -> 12
+    Persuasion -> 13
+    Religion -> 14
+    SleightOfHand -> 15
+    Stealth -> 16
+    Survival -> 17
+
+fromInt : Int -> Skill
+fromInt skill =
+  case skill of
+    0 -> Acrobatics
+    1 -> AnimalHandling
+    2 -> Arcana
+    3 -> Athletics
+    4 -> Deception
+    5 -> History
+    6 -> Insight
+    7 -> Intimidation
+    8 -> Investigation
+    9 -> Medicine
+    10 -> Nature
+    11 -> Perception
+    12 -> Performance
+    13 -> Persuasion
+    14 -> Religion
+    15 -> SleightOfHand
+    16 -> Stealth
+    17 -> Survival
+    _ -> Acrobatics
+
+skillWithLabel : List ( Skill, String )
+skillWithLabel =
+  allSkills
+  |> List.map (\skill -> (skill, skillLabel skill))
+
+type DamageType = Acid | Bludgeoning | Cold | Fire | Force | Lightning |
+  Necrotic | Piercing | Poison | Psychic | Radiant | Slashing | Thunder
+
+damageTypes : List DamageType
+damageTypes =
+  [ Acid
+  , Bludgeoning
+  , Cold
+  , Fire
+  , Force
+  , Lightning
+  , Necrotic
+  , Piercing
+  , Poison
+  , Psychic
+  , Radiant
+  , Slashing
+  , Thunder
+  ]
+
+damageTypeToInt : DamageType -> Int
+damageTypeToInt damageType =
+  case damageType of
+    Acid -> 0
+    Bludgeoning -> 1
+    Cold -> 2
+    Fire -> 3
+    Force -> 4
+    Lightning -> 5
+    Necrotic -> 6
+    Piercing -> 7
+    Poison -> 8
+    Psychic -> 9
+    Radiant -> 10
+    Slashing -> 11
+    Thunder -> 12
+
+damageTypeFromInt : Int -> DamageType
+damageTypeFromInt damageType =
+  case damageType of
+    0 -> Acid
+    1 -> Bludgeoning
+    2 -> Cold
+    3 -> Fire
+    4 -> Force
+    5 -> Lightning
+    6 -> Necrotic
+    7 -> Piercing
+    8 -> Poison
+    9 -> Psychic
+    10 -> Radiant
+    11 -> Slashing
+    12 -> Thunder
+    _ -> Fire
+
+damageTypeLabel : DamageType -> String
+damageTypeLabel damageType =
+  case damageType of
+    Acid -> "Acid"
+    Bludgeoning -> "Bludgeoning"
+    Cold -> "Cold"
+    Fire -> "Fire"
+    Force -> "Force"
+    Lightning -> "Lightning"
+    Necrotic -> "Necrotic"
+    Piercing -> "Piercing"
+    Poison -> "Poison"
+    Psychic -> "Psychic"
+    Radiant -> "Radiant"
+    Slashing -> "Slashing"
+    Thunder -> "Thunder"
+
+damageTypeWithLabel : List ( DamageType, String )
+damageTypeWithLabel =
+  damageTypes
+  |> List.map (\damageType -> (damageType, damageTypeLabel damageType))
 
 type Size = Tiny | Small | Medium | Large | Huge | Gargantuan
 
@@ -250,6 +446,15 @@ type Msg
   | UpdateSaveInt String
   | UpdateSaveWis String
   | UpdateSaveCha String
+  | UpdateSkillToAdd Skill
+  | AddSkill
+  | UpdateSkillValue String
+  | UpdateVulnerabilityToAdd DamageType
+  | AddVulnerability
+  | UpdateResistanceToAdd DamageType
+  | AddResistance
+  | UpdateImmunityToAdd DamageType
+  | AddImmunity
 
 update : Msg -> Model -> Model
 update msg model =
@@ -329,6 +534,38 @@ update msg model =
     UpdateSaveCha string ->
       { model | saveCha = unwrapInt model.saveCha string }
 
+    UpdateSkillToAdd skill ->
+      { model | skillToAdd = skill }
+
+    AddSkill ->
+      { model | skills =
+        if model.skillValue /= 0 then
+          Dict.insert (toInt model.skillToAdd) model.skillValue model.skills
+        else
+          Dict.remove (toInt model.skillToAdd) model.skills
+         }
+
+    UpdateSkillValue string ->
+      { model | skillValue = unwrapInt model.skillValue string }
+
+    UpdateVulnerabilityToAdd damageType ->
+      { model | vulnerabilityToAdd = damageType }
+
+    AddVulnerability ->
+      { model | vulnerabilities = Set.insert (damageTypeToInt model.vulnerabilityToAdd) model.vulnerabilities }
+
+    UpdateResistanceToAdd damageType ->
+      { model | resistanceToAdd = damageType }
+
+    AddResistance ->
+      { model | resistances = Set.insert (damageTypeToInt model.resistanceToAdd) model.resistances }
+
+    UpdateImmunityToAdd damageType ->
+      { model | immunityToAdd = damageType }
+
+    AddImmunity ->
+      { model | immunities = Set.insert (damageTypeToInt model.immunityToAdd) model.immunities }
+
 unwrapInt : Int -> String -> Int
 unwrapInt default value =
   case String.toInt value of
@@ -372,6 +609,14 @@ view model =
     , inputAndLabel "INT" (toString model.saveInt) UpdateSaveInt "number"
     , inputAndLabel "WIS" (toString model.saveWis) UpdateSaveWis "number"
     , inputAndLabel "CHA" (toString model.saveCha) UpdateSaveCha "number"
+    , Html.p [] [ Html.text "Skills" ]
+    , selectNewSkill model
+    , Html.p [] [ Html.text "Vulnerabilities" ]
+    , selectNewVulnerability model
+    , Html.p [] [ Html.text "Resistances" ]
+    , selectNewResistance model
+    , Html.p [] [ Html.text "Immunities" ]
+    , selectNewImmunity model
     ]
   , display model
   ]
@@ -488,6 +733,76 @@ checkbox label checked update =
     []
   , Html.text label
   ]
+
+selectNewVulnerability : Model -> Html.Html Msg
+selectNewVulnerability model =
+  Html.div []
+  [ Html.ul []
+    ( Set.toList model.vulnerabilities
+    |> List.map damageTypeFromInt
+    |> List.map (\damageType -> Html.li [] [ Html.text <| damageTypeLabel <| damageType ]) )
+  , selectFromValuesWithLabels damageTypeWithLabel model.vulnerabilityToAdd UpdateVulnerabilityToAdd
+  , Html.button
+    [ Html.Attributes.type_ "button"
+    , Html.Events.onClick AddVulnerability
+    ]
+    [ Html.text "Add Vulnerability" ]
+  ]
+
+selectNewResistance : Model -> Html.Html Msg
+selectNewResistance model =
+  Html.div []
+  [ Html.ul []
+    ( Set.toList model.resistances
+    |> List.map damageTypeFromInt
+    |> List.map (\damageType -> Html.li [] [ Html.text <| damageTypeLabel <| damageType ]) )
+  , selectFromValuesWithLabels damageTypeWithLabel model.resistanceToAdd UpdateResistanceToAdd
+  , Html.button
+    [ Html.Attributes.type_ "button"
+    , Html.Events.onClick AddResistance
+    ]
+    [ Html.text "Add Resistance" ]
+  ]
+
+selectNewImmunity : Model -> Html.Html Msg
+selectNewImmunity model =
+  Html.div []
+  [ Html.ul []
+    ( Set.toList model.immunities
+    |> List.map damageTypeFromInt
+    |> List.map (\damageType -> Html.li [] [ Html.text <| damageTypeLabel <| damageType ]) )
+  , selectFromValuesWithLabels damageTypeWithLabel model.immunityToAdd UpdateImmunityToAdd
+  , Html.button
+    [ Html.Attributes.type_ "button"
+    , Html.Events.onClick AddImmunity
+    ]
+    [ Html.text "Add Immunity" ]
+  ]
+
+selectNewSkill : Model -> Html.Html Msg
+selectNewSkill model =
+  Html.div []
+  [ Html.ul []
+    (listSkills model.skills)
+  , selectFromValuesWithLabels skillWithLabel model.skillToAdd UpdateSkillToAdd
+  , Html.input
+    [ Html.Attributes.value <| toString model.skillValue
+    , Html.Events.onInput UpdateSkillValue
+    , Html.Attributes.type_ "number"
+    ] []
+  , Html.button
+    [ Html.Attributes.type_ "button"
+    , Html.Events.onClick AddSkill
+    ]
+    [ Html.text "Add Skill" ]
+  ]
+
+listSkills : Dict.Dict Int Int -> List (Html.Html Msg)
+listSkills dict =
+  Dict.toList dict
+  |> List.map (\(skillInt, value) -> (fromInt skillInt, value))
+  |> List.map (\(skill, value) -> (skillLabel skill, value))
+  |> List.map (\(label, value) -> Html.li [] [Html.text <| label ++ " " ++ toString value])
 
 selectAndLabel : String -> List ( a, String ) -> a -> (a -> Msg) -> Html.Html Msg
 selectAndLabel label valuesWithLabels currentValue update =
