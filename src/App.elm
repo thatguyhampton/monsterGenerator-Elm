@@ -43,6 +43,11 @@ type alias Model =
   , resistanceToAdd : DamageType
   , immunities : Set.Set Int
   , immunityToAdd : DamageType
+  , senses : Dict.Dict Int Int
+  , senseToAdd : Sense
+  , senseValue : Int
+  , languages : Set.Set Int
+  , languageToAdd : Language
   }
 
 model : Model
@@ -81,6 +86,11 @@ model =
   , resistanceToAdd = Acid
   , immunities = Set.empty
   , immunityToAdd = Acid
+  , senses = Dict.empty
+  , senseToAdd = Darkvision
+  , senseValue = 0
+  , languages = Set.empty
+  , languageToAdd = Language_Common
   }
 
 type Skill = Acrobatics | AnimalHandling | Arcana | Athletics | Deception
@@ -258,6 +268,138 @@ damageTypeWithLabel : List ( DamageType, String )
 damageTypeWithLabel =
   damageTypes
   |> List.map (\damageType -> (damageType, damageTypeLabel damageType))
+
+type Sense = Blindsight | Darkvision | Tremorsense | Truesight
+
+senseToInt : Sense -> Int
+senseToInt sense =
+  case sense of
+    Blindsight -> 0
+    Darkvision -> 1
+    Tremorsense -> 2
+    Truesight -> 3
+
+senseFromInt : Int -> Sense
+senseFromInt sense =
+  case sense of
+    0 -> Blindsight
+    1 -> Darkvision
+    2 -> Tremorsense
+    3 -> Truesight
+    _ -> Darkvision
+
+senseLabel : Sense -> String
+senseLabel sense =
+  case sense of
+    Blindsight -> "Blindsight"
+    Darkvision -> "Darkvision"
+    Tremorsense -> "Tremorsense"
+    Truesight -> "Truesight"
+
+senses : List Sense
+senses =
+  [ Blindsight
+  , Darkvision
+  , Tremorsense
+  , Truesight
+  ]
+
+senseWithLabel : List ( Sense, String )
+senseWithLabel =
+  senses
+  |> List.map (\sense -> (sense, senseLabel sense))
+
+type Language = Language_Abyssal | Language_Celestial | Language_Common |
+  Language_DeepSpeech | Language_Draconic | Language_Dwarvish |
+  Language_Elvish | Language_Giant | Language_Gnomish | Language_Goblin |
+  Language_Halfling | Language_Infernal | Language_Orc | Language_Primordial |
+  Language_Sylvan | Language_Undercommon
+
+languageToInt : Language -> Int
+languageToInt language =
+  case language of
+    Language_Abyssal -> 0
+    Language_Celestial -> 1
+    Language_Common -> 2
+    Language_DeepSpeech -> 3
+    Language_Draconic -> 4
+    Language_Dwarvish -> 5
+    Language_Elvish -> 6
+    Language_Giant -> 7
+    Language_Gnomish -> 8
+    Language_Goblin -> 9
+    Language_Halfling -> 10
+    Language_Infernal -> 11
+    Language_Orc -> 12
+    Language_Primordial -> 13
+    Language_Sylvan -> 14
+    Language_Undercommon -> 15
+
+languageFromInt : Int -> Language
+languageFromInt language =
+  case language of
+    0 -> Language_Abyssal
+    1 -> Language_Celestial
+    2 -> Language_Common
+    3 -> Language_DeepSpeech
+    4 -> Language_Draconic
+    5 -> Language_Dwarvish
+    6 -> Language_Elvish
+    7 -> Language_Giant
+    8 -> Language_Gnomish
+    9 -> Language_Goblin
+    10 -> Language_Halfling
+    11 -> Language_Infernal
+    12 -> Language_Orc
+    13 -> Language_Primordial
+    14 -> Language_Sylvan
+    15 -> Language_Undercommon
+    _ -> Language_Common
+
+languageLabel : Language -> String
+languageLabel language =
+  case language of
+    Language_Abyssal -> "Abyssal"
+    Language_Celestial -> "Celestial"
+    Language_Common -> "Common"
+    Language_DeepSpeech -> "Deep Speech"
+    Language_Draconic -> "Draconic"
+    Language_Dwarvish -> "Dwarvish"
+    Language_Elvish -> "Elvish"
+    Language_Giant -> "Giant"
+    Language_Gnomish -> "Gnomish"
+    Language_Goblin -> "Goblin"
+    Language_Halfling -> "Halfling"
+    Language_Infernal -> "Infernal"
+    Language_Orc -> "Orc"
+    Language_Primordial -> "Primordial"
+    Language_Sylvan -> "Sylvan"
+    Language_Undercommon -> "Undercommon"
+
+languages : List Language
+languages =
+  [ Language_Abyssal
+  , Language_Celestial
+  , Language_Common
+  , Language_DeepSpeech
+  , Language_Draconic
+  , Language_Dwarvish
+  , Language_Elvish
+  , Language_Giant
+  , Language_Gnomish
+  , Language_Goblin
+  , Language_Halfling
+  , Language_Infernal
+  , Language_Orc
+  , Language_Primordial
+  , Language_Sylvan
+  , Language_Undercommon
+  ]
+
+languageWithLabel : List ( Language, String )
+languageWithLabel =
+  languages
+  |> List.map (\language -> (language, languageLabel language))
 
 type Size = Tiny | Small | Medium | Large | Huge | Gargantuan
 
@@ -455,6 +597,13 @@ type Msg
   | AddResistance
   | UpdateImmunityToAdd DamageType
   | AddImmunity
+  | UpdateSenseToAdd Sense
+  | UpdateSenseValue String
+  | AddSense
+  | RemoveSense Sense
+  | UpdateLanguageToAdd Language
+  | AddLanguage
+  | RemoveLanguage Language
 
 update : Msg -> Model -> Model
 update msg model =
@@ -566,6 +715,27 @@ update msg model =
     AddImmunity ->
       { model | immunities = Set.insert (damageTypeToInt model.immunityToAdd) model.immunities }
 
+    UpdateSenseToAdd sense ->
+      { model | senseToAdd = sense }
+
+    UpdateSenseValue string  ->
+      { model | senseValue = unwrapInt model.senseValue string }
+
+    AddSense ->
+      { model | senses = Dict.insert (senseToInt model.senseToAdd) model.senseValue model.senses }
+
+    RemoveSense sense ->
+      { model | senses = Dict.remove (senseToInt sense) model.senses }
+
+    UpdateLanguageToAdd language ->
+      { model | languageToAdd = language }
+
+    AddLanguage ->
+      { model | languages = Set.insert (languageToInt model.languageToAdd) model.languages }
+
+    RemoveLanguage language ->
+      { model | languages = Set.remove (languageToInt language) model.languages }
+
 unwrapInt : Int -> String -> Int
 unwrapInt default value =
   case String.toInt value of
@@ -617,6 +787,10 @@ view model =
     , selectNewResistance model
     , Html.p [] [ Html.text "Immunities" ]
     , selectNewImmunity model
+    , Html.p [] [ Html.text "Senses" ]
+    , selectNewSense model
+    , Html.p [] [ Html.text "Languages" ]
+    , selectNewLanguage model
     ]
   , display model
   ]
@@ -797,12 +971,69 @@ selectNewSkill model =
     [ Html.text "Add Skill" ]
   ]
 
+selectNewSense : Model -> Html.Html Msg
+selectNewSense model =
+  Html.div []
+  [ Html.ul []
+    (listSenses model.senses)
+  , selectFromValuesWithLabels senseWithLabel model.senseToAdd UpdateSenseToAdd
+  , Html.input
+    [ Html.Attributes.value <| toString model.senseValue
+    , Html.Events.onInput UpdateSenseValue
+    , Html.Attributes.type_ "number"
+    ][]
+  , Html.span [] [ Html.text "ft." ]
+  , Html.button
+    [ Html.Attributes.type_ "button"
+    , Html.Events.onClick AddSense
+    ]
+    [ Html.text "Add Sense" ]
+  ]
+
+selectNewLanguage : Model -> Html.Html Msg
+selectNewLanguage model =
+  Html.div []
+  [ Html.ul []
+    ( Set.toList model.languages
+    |> List.map languageFromInt
+    |> List.map (\language -> Html.li []
+        [ Html.text <| languageLabel <| language
+        , Html.button
+          [ Html.Attributes.type_ "button"
+          , Html.Events.onClick (RemoveLanguage language)
+          ]
+          [ Html.text "Remove" ]
+        ]
+      )
+    )
+  , selectFromValuesWithLabels languageWithLabel model.languageToAdd UpdateLanguageToAdd
+  , Html.button
+    [ Html.Attributes.type_ "button"
+    , Html.Events.onClick AddLanguage
+    ]
+    [ Html.text "Add Language" ]
+  ]
+
 listSkills : Dict.Dict Int Int -> List (Html.Html Msg)
 listSkills dict =
   Dict.toList dict
   |> List.map (\(skillInt, value) -> (fromInt skillInt, value))
   |> List.map (\(skill, value) -> (skillLabel skill, value))
   |> List.map (\(label, value) -> Html.li [] [Html.text <| label ++ " " ++ toString value])
+
+listSenses : Dict.Dict Int Int -> List (Html.Html Msg)
+listSenses dict =
+  Dict.toList dict
+  |> List.map (\(sense, value) -> (senseFromInt sense, value))
+  |> List.map (\(sense, value) -> Html.li []
+      [ Html.text <| (senseLabel sense) ++ " " ++ toString value ++ " ft."
+      , Html.button
+        [ Html.Attributes.type_ "button"
+        , Html.Events.onClick (RemoveSense sense)
+        ]
+        [ Html.text "Remove" ]
+      ]
+    )
 
 selectAndLabel : String -> List ( a, String ) -> a -> (a -> Msg) -> Html.Html Msg
 selectAndLabel label valuesWithLabels currentValue update =
